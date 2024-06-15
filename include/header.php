@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-2 no-padding-left-right">
                 <div class="logo">
-                    <a href="index-2.html">Food Menu</a>
+                    <a href="Home">Food Menu</a>
                 </div>
             </div>
             <div class="col-md-4 search-area">
