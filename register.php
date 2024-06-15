@@ -11,6 +11,8 @@ if (isset($_POST['registration'])) {
     $user_name = $db_handle->checkValue($_POST['user_name']);
     $restaurant_name = $db_handle->checkValue($_POST['restaurant_name']);
     $email = $db_handle->checkValue($_POST['email']);
+    $contact_number = $db_handle->checkValue($_POST['contact_number']);
+    $whatsapp = $db_handle->checkValue($_POST['whatsapp']);
     $password = $db_handle->checkValue($_POST['password']);
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -18,7 +20,7 @@ if (isset($_POST['registration'])) {
     if($check_email > 0){
         $result = 1;
     }else {
-        $register_user = $db_handle->insertQuery("INSERT INTO `users`(`admin_name`, `restaurant_name`, `registration_date`, `admin_email`, `admin_password`, `status`, `type`, `inserted_at` ) VALUES ('$user_name','$restaurant_name','$today','$email','$hashed_password','0','1','$inserted_at')");
+        $register_user = $db_handle->insertQuery("INSERT INTO `users`(`admin_name`, `restaurant_name`, `registration_date`, `admin_email`, `admin_password`, `status`, `type`, `inserted_at`,`contact_number`,`whatsapp` ) VALUES ('$user_name','$restaurant_name','$today','$email','$hashed_password','0','1','$inserted_at','$contact_number','$whatsapp')");
         if($register_user){
             $result = 2;
         } else {
@@ -94,16 +96,20 @@ if (isset($_POST['registration'])) {
                     </div>
                     <div class="register-form">
                         <form id="registrationForm" action="" method="post">
-                            <p>User Full Name</p>
+                            <p>User Full Name *</p>
                             <input type="text" name="user_name" placeholder="enter your full name" required>
-                            <p>Restaurant Name</p>
+                            <p>Restaurant Name *</p>
                             <input type="text" name="restaurant_name" placeholder="restaurant name" required>
-                            <p>Email address</p>
+                            <p>Email address *</p>
                             <input type="email" id="email" name="email" placeholder="email address" required>
                             <span id="emailCheckMessage" style="color: red"></span>
-                            <p>Password</p>
+                            <p>Contact Number *</p>
+                            <input type="text" name="contact_number" placeholder="contact number" required>
+                            <p>What's App Number (If Available)</p>
+                            <input type="text" name="whatsapp" placeholder="whatsapp number">
+                            <p>Password *</p>
                             <input type="password" id="password" name="password" placeholder="Password" required>
-                            <p>Confirm password</p>
+                            <p>Confirm password *</p>
                             <input type="password" id="password_confirm" name="password_confirm"
                                    placeholder="Confirm password" required>
                             <p id="message" style="color: red"></p>

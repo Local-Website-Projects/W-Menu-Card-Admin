@@ -15,6 +15,11 @@ if(!isset($_SESSION['admin'])){
 <link href="assets/css/animate.min.css" rel="stylesheet">
 <!-- material fonts.css -->
 <link href="assets/css/material-design-iconic-font.min.css" rel="stylesheet">
+<!-- parfect scrollbar.css -->
+<link href="assets/css/perfect-scrollbar.min.css" rel="stylesheet">
+<!-- nice select.css -->
+<link href="assets/css/nice-select.css" rel="stylesheet">
+
 <!-- style.css -->
 <link href="style.css" rel="stylesheet">
 <!-- responsive.css -->

@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-2 no-padding-left-right">
                 <div class="logo">
-                    <a href="index-2.html">EKUDMIN</a>
+                    <a href="index-2.html">Food Menu</a>
                 </div>
             </div>
             <div class="col-md-4 search-area">
@@ -40,7 +40,7 @@
                                     <ul class="menu">
                                         <li>
                                             <!-- Single icon -->
-                                            <a href="#">
+                                            <a href="Profile">
                                                 <div class="single-flag">
                                                     <span class="user-hv cta1" style="background: url(assets/img/user.png);"></span>
                                                     <div class="header-right-icon-text">

@@ -8,7 +8,7 @@ $_SESSION['alert'] = '';
 if(isset($_POST['login'])){
     $email = $db_handle->checkValue($_POST['email']);
     $password = $db_handle->checkValue($_POST['password']);
-    $select_user = $db_handle->runQuery("select * from users where admin_email = '$email'");
+    $select_user = $db_handle->runQuery("select * from users where admin_email = '$email' and status = '1'");
     if(count($select_user) > 0) {
         $hashed_password = $select_user[0]['admin_password'];
         if (password_verify($password, $hashed_password)) {
