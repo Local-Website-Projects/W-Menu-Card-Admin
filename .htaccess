@@ -1,0 +1,9 @@
+RewriteEngine on
+
+RewriteRule ^Home index.php [NE,L]
+RewriteRule ^Login login.php [NE,L]
+RewriteRule ^Register register.php [NE,L]
+RewriteRule ^Terms terms.php [NE,L]
+RewriteRule ^Logout logout.php [NE,L]
+RewriteRule ^Insert insert.php [NE,L]
+RewriteRule ^Update update.php [NE,L]
