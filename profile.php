@@ -97,11 +97,11 @@ $today = date("Y-m-d");
                                 <div class="col-lg-8">
                                     <div class="radio-btn-bottms">
                                     <span class="radio-btn ctas1">
-                                        <input id="radio-2ss" name="status" value="1" type="radio" <?php if ($fetch_admin[0]['status'] == '1') echo 'checked';?>>
+                                        <input id="radio-2ss" name="status" value="1" type="radio" <?php if ($fetch_admin[0]['availability'] == '1') echo 'checked';?>>
                                         <label for="radio-2ss" class="radio-label">On</label>
                                     </span>
                                         <span class="radio-btn ctas2">
-                                        <input id="radio-3ss" name="status" value="0" type="radio" <?php if ($fetch_admin[0]['status'] == '0') echo 'checked';?>>
+                                        <input id="radio-3ss" name="status" value="0" type="radio" <?php if ($fetch_admin[0]['availability'] == '0') echo 'checked';?>>
                                         <label for="radio-3ss" class="radio-label">Off</label>
                                     </span>
                                     </div>
@@ -113,17 +113,19 @@ $today = date("Y-m-d");
                     <div class="col-lg-6">
                         <div class="form-basic form-shadow">
                             <h3 class="form-title">Password Update</h3>
-                            <form action="Update" method="post">
+                            <form action="Update" method="post" id="password_update">
                                 <p>Old Password</p>
-                                <input type="text" placeholder="old password" name="old_password"
+                                <input type="password" placeholder="old password" name="old_password"
                                        required>
                                 <p>New Password</p>
-                                <input type="text" placeholder="new_password"
-                                       name="new_password" required>
+                                <input type="password" placeholder="new_password"
+                                       id="new_password" name="new_password" required>
                                 <p>Confirm New Password</p>
-                                <input type="text" placeholder="Confirm New Password"
-                                       name="confirm_password" required>
-                                <input type="submit" name="update_password" value="Update">
+                                <input type="password" placeholder="Confirm New Password"
+                                       name="confirm_password" id="confirm_new_password" required>
+                                <span id="password_match_message" style="color: red; display: none;">Password and Confirm Password do not match.</span>
+                                <input type="submit" name="confirm_new_password" value="Update">
+
                             </form>
                         </div>
                     </div>
@@ -140,6 +142,30 @@ $today = date("Y-m-d");
 
 
 <?php include('include/js.php'); ?>
+<script>
+    document.getElementById("confirm_new_password").addEventListener("input", function() {
+        var newPassword = document.getElementById("new_password").value;
+        var confirmNewPassword = this.value;
+        var messageSpan = document.getElementById("password_match_message");
+        let btn = document.getElementById("update_password");
+
+        if (newPassword !== confirmNewPassword) {
+            messageSpan.style.display = "block";
+        } else {
+            messageSpan.style.display = "none";
+        }
+    });
+    document.getElementById('password_update').addEventListener('submit', function (event) {
+        var password = document.getElementById('new_password').value;
+        var confirmPassword = document.getElementById('confirm_new_password').value;
+        var message = document.getElementById('password_match_message');
+
+        if (password !== confirmPassword) {
+            message.textContent = "Password and Confirm Password do not match.";
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
 </body>
 
 

@@ -49,6 +49,17 @@
                                                 </div>
                                             </a>
                                         </li>
+                                        <li>
+                                            <!-- Single icon -->
+                                            <a href="Settings">
+                                                <div class="single-flag">
+                                                    <span class="user-hv cta1" style="background: url(assets/img/setting.png);"></span>
+                                                    <div class="header-right-icon-text">
+                                                        <p>Settings</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
                                         <!--  End Single icon -->
 
                                         <li>
