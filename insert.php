@@ -13,3 +13,33 @@ if(!isset($_SESSION['admin'])){
     </script>
     ";
 }
+
+$_SESSION['alert'] = '';
+
+
+if(isset($_POST['add_category'])){
+    $cat_name = $db_handle->checkValue($_POST['cat_name']);
+    $add_category = $db_handle->insertQuery("INSERT INTO `category`(`user_id`, `category_name`, `inserted_at`) VALUES ('{$_SESSION['admin']}','$cat_name','$inserted_at')");
+    if($add_category){
+        $_SESSION['alert'] = 'success';
+        echo "<script>window.location.href = 'Category';</script>";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "<script>window.location.href = 'Category';</script>";
+    }
+}
+
+if(isset($_POST['add_item'])){
+    $item_name = $db_handle->checkValue($_POST['item_name']);
+    $item_price = $db_handle->checkValue($_POST['item_price']);
+    $short_desc = $db_handle->checkValue($_POST['short_desc']);
+
+    $insert_item = $db_handle->insertQuery("INSERT INTO `items`(`user_id`, `item_name`, `item_price`, `short_desc`, `inserted_at`) VALUES ('{$_SESSION['admin']}','$item_name','$item_price','$short_desc','$inserted_at')");
+    if($insert_item){
+        $_SESSION['alert'] = 'success';
+        echo "<script>window.location.href = 'Item';</script>";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "<script>window.location.href = 'Item';</script>";
+    }
+}

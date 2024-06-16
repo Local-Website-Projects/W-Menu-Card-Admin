@@ -13,12 +13,21 @@ if(isset($_POST['login'])){
         $hashed_password = $select_user[0]['admin_password'];
         if (password_verify($password, $hashed_password)) {
             $_SESSION['admin'] = $select_user[0]['user_id'];
-            $_SESSION['alert'] = 'success';
-            echo "
+            $_SESSION['alert'] = 'login_success';
+            if($select_user[0]['type'] == '1'){
+                echo "
+        <script>
+        window.location.href = 'Category';
+</script>
+        ";
+            } else {
+                echo "
         <script>
         window.location.href = 'Home';
 </script>
         ";
+            }
+
         } else {
             $_SESSION['alert'] = 'error';
         }

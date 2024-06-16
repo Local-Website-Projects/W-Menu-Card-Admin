@@ -13,13 +13,13 @@
                     <ul class="nav d-inl-bl">
                         <!-- Messages: style can be found in dropdown.less-->
                         <li class="dropdown header-left-flag cta1">
-                            <a href="#" class="dropdown-toggle cta1" data-toggle="dropdown"></a>
+                            <a href="Category" class="dropdown-toggle cta1"></a>
                         </li>
                     </ul>
                     <ul class="nav d-inl-bl">
                         <!-- Messages: style can be found in dropdown.less-->
                         <li class="dropdown header-left-flag cta2">
-                            <a href="#" class="dropdown-toggle cta2" data-toggle="dropdown"></a>
+                            <a href="#" class="dropdown-toggle cta2"></a>
                         </li>
                     </ul>
                     <ul class="nav d-inl-bl">

@@ -66,8 +66,6 @@ if(isset($_POST['confirm_new_password'])){
     }
 }
 
-
-
 if(isset($_POST['update_contact_info'])){
     $address = $db_handle->checkValue($_POST['address']);
     $contact_number_one = $db_handle->checkValue($_POST['contact_number_one']);
@@ -114,5 +112,67 @@ if(isset($_POST['update_contact_info'])){
 </script>
         ";
         }
+    }
+}
+
+
+if(isset($_POST['category_edit'])){
+    $cat_id = $db_handle->checkValue($_POST['cat_id']);
+    $cat_name = $db_handle->checkValue($_POST['cat_name']);
+    $update_cat = $db_handle->insertQuery("UPDATE `category` SET `category_name`='$cat_name',`updated_at`='$updated_at' WHERE cat_id = '$cat_id'");
+    if($update_cat){
+        $_SESSION['alert'] = 'success';
+        echo "
+        <script>
+        window.location.href = 'Category';
+</script>
+        ";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "
+        <script>
+        window.location.href = 'Category';
+</script>
+        ";
+    }
+}
+
+
+if(isset($_GET['id']) && isset($_GET['status'])){
+    $update_cat_status = $db_handle->insertQuery("UPDATE `category` SET `status`='{$_GET['status']}',`updated_at`='$updated_at' WHERE cat_id = {$_GET['id']}");
+    if($update_cat_status){
+        $_SESSION['alert'] = 'success';
+        echo "<script>window.location.href='Category';</script>";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "<script>window.location.href='Category';</script>";
+    }
+}
+
+
+if(isset($_GET['item_id']) && isset($_GET['status'])){
+    $update_cat_status = $db_handle->insertQuery("UPDATE `items` SET `status`='{$_GET['status']}',`updated_at`='$updated_at' WHERE item_id = {$_GET['item_id']}");
+    if($update_cat_status){
+        $_SESSION['alert'] = 'success';
+        echo "<script>window.location.href='Item';</script>";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "<script>window.location.href='Item';</script>";
+    }
+}
+
+
+if(isset($_POST['update_item'])){
+    $item_name = $db_handle->checkValue($_POST['item_name']);
+    $item_price = $db_handle->checkValue($_POST['item_price']);
+    $short_desc = $db_handle->checkValue($_POST['short_desc']);
+    $item_id = $db_handle->checkValue($_POST['item_id']);
+    $update_item = $db_handle->insertQuery("UPDATE `items` SET `item_name`='$item_name',`item_price`='$item_price',`short_desc`='$short_desc',`updated_at`='$updated_at' WHERE item_id = '$item_id'");
+    if($update_item){
+        $_SESSION['alert'] = 'success';
+        echo "<script>window.location.href='Item';</script>";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "<script>window.location.href='Item';</script>";
     }
 }
