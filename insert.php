@@ -33,8 +33,9 @@ if(isset($_POST['add_item'])){
     $item_name = $db_handle->checkValue($_POST['item_name']);
     $item_price = $db_handle->checkValue($_POST['item_price']);
     $short_desc = $db_handle->checkValue($_POST['short_desc']);
+    $cat_id = $db_handle->checkValue($_POST['cat_id']);
 
-    $insert_item = $db_handle->insertQuery("INSERT INTO `items`(`user_id`, `item_name`, `item_price`, `short_desc`, `inserted_at`) VALUES ('{$_SESSION['admin']}','$item_name','$item_price','$short_desc','$inserted_at')");
+    $insert_item = $db_handle->insertQuery("INSERT INTO `items`(`user_id`, `item_name`, `item_price`, `short_desc`, `inserted_at`,`cat_id`) VALUES ('{$_SESSION['admin']}','$item_name','$item_price','$short_desc','$inserted_at','$cat_id')");
     if($insert_item){
         $_SESSION['alert'] = 'success';
         echo "<script>window.location.href = 'Item';</script>";

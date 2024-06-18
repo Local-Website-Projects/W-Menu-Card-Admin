@@ -167,7 +167,8 @@ if(isset($_POST['update_item'])){
     $item_price = $db_handle->checkValue($_POST['item_price']);
     $short_desc = $db_handle->checkValue($_POST['short_desc']);
     $item_id = $db_handle->checkValue($_POST['item_id']);
-    $update_item = $db_handle->insertQuery("UPDATE `items` SET `item_name`='$item_name',`item_price`='$item_price',`short_desc`='$short_desc',`updated_at`='$updated_at' WHERE item_id = '$item_id'");
+    $cat_id = $db_handle->checkValue($_POST['cat_id']);
+    $update_item = $db_handle->insertQuery("UPDATE `items` SET `item_name`='$item_name',`item_price`='$item_price',`short_desc`='$short_desc',`updated_at`='$updated_at',`cat_id` = '$cat_id' WHERE item_id = '$item_id'");
     if($update_item){
         $_SESSION['alert'] = 'success';
         echo "<script>window.location.href='Item';</script>";

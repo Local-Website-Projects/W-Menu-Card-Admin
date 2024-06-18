@@ -52,7 +52,7 @@ $today = date("Y-m-d");
                     <div class="col-12">
                         <div class="alert-single-item cta2">
                             <h4>Success - Data Updated Successful<span class="alert-close"><i
-                                        class="zmdi zmdi-close"></i></span></h4>
+                                            class="zmdi zmdi-close"></i></span></h4>
                         </div>
                     </div>
                     <?php
@@ -63,7 +63,7 @@ $today = date("Y-m-d");
                     <div class="col-12">
                         <div class="alert-single-item cta5">
                             <h4>Sorry - Something went wrong<span class="alert-close"><i
-                                        class="zmdi zmdi-close"></i></span></h4>
+                                            class="zmdi zmdi-close"></i></span></h4>
                         </div>
                     </div>
                     <?php
@@ -73,8 +73,8 @@ $today = date("Y-m-d");
             </div>
 
             <?php
-            if(isset($_GET['edit'])){
-                $items = $db_handle->runQuery("select * from items where item_id = {$_GET['edit']}");
+            if (isset($_GET['edit'])) {
+                $items = $db_handle->runQuery("select * from items,category where item_id = {$_GET['edit']} and items.cat_id = category.cat_id");
                 ?>
                 <div class="row">
                     <div class="col-12">
@@ -82,14 +82,26 @@ $today = date("Y-m-d");
                         <div class="form-basic form-shadow">
                             <form action="Update" method="post">
                                 <p>Item Name</p>
-                                <input type="hidden" value="<?php echo $_GET['edit'];?>" name="item_id">
-                                <input type="text" value="<?php echo $items[0]['item_name'];?>" name="item_name"
+                                <input type="hidden" value="<?php echo $_GET['edit']; ?>" name="item_id">
+                                <input type="text" value="<?php echo $items[0]['item_name']; ?>" name="item_name"
                                        required>
                                 <p>Item Price</p>
-                                <input type="text" value="<?php echo $items[0]['item_price'];?>" name="item_price"
+                                <input type="text" value="<?php echo $items[0]['item_price']; ?>" name="item_price"
                                        required>
+                                <p>Select Category</p>
+                                <select name="cat_id" class="form-control" required>
+                                    <option value="<?php echo $items[0]['cat_id'];?>" selected><?php echo $items[0]['category_name'];?></option>
+                                    <?php
+                                    $fetch_cat = $db_handle->runQuery("select * from category where user_id = {$_SESSION['admin']} and status = 1");
+                                    for($i=0; $i<count($fetch_cat); $i++){
+                                        ?>
+                                        <option value="<?php echo $fetch_cat[$i]['cat_id'];?>"><?php echo $fetch_cat[$i]['category_name'];?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
                                 <p>Short Description</p>
-                                <input type="text" value="<?php echo $items[0]['short_desc'];?>" name="short_desc"
+                                <input type="text" value="<?php echo $items[0]['short_desc']; ?>" name="short_desc"
                                        required>
                                 <input type="submit" name="update_item" value="Update Item">
                             </form>
@@ -116,7 +128,8 @@ $today = date("Y-m-d");
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLongTitle22">Add Item</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
@@ -129,15 +142,29 @@ $today = date("Y-m-d");
                                                         <p>Item Price</p>
                                                         <input type="text" placeholder="Item Price" name="item_price"
                                                                required>
+                                                        <p>Select Category</p>
+                                                            <select name="cat_id" class="form-control" required>
+                                                                <option value="#">Select item category</option>
+                                                                <?php
+                                                                $fetch_cat = $db_handle->runQuery("select * from category where user_id = {$_SESSION['admin']} and status = 1");
+                                                                for($i=0; $i<count($fetch_cat); $i++){
+                                                                    ?>
+                                                                    <option value="<?php echo $fetch_cat[$i]['cat_id'];?>"><?php echo $fetch_cat[$i]['category_name'];?></option>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                            </select>
                                                         <p>Short Description</p>
-                                                        <input type="text" placeholder="Short Description" name="short_desc"
+                                                        <input type="text" placeholder="Short Description"
+                                                               name="short_desc"
                                                                required>
                                                         <input type="submit" name="add_item" value="Add Item">
                                                     </form>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Close
                                                 </button>
                                             </div>
                                         </div>
@@ -155,6 +182,7 @@ $today = date("Y-m-d");
                                 <th scope="col">Sl No</th>
                                 <th scope="col">Item Name</th>
                                 <th scope="col">Item Price</th>
+                                <th scope="col">Category Name</th>
                                 <th scope="col">Item Description</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
@@ -162,29 +190,33 @@ $today = date("Y-m-d");
                             </thead>
                             <tbody>
                             <?php
-                            $fetch_item = $db_handle->runQuery("select * from items where user_id = {$_SESSION['admin']} order by item_id desc");
-                            $fetch_item_no = $db_handle->numRows("select * from items where user_id = {$_SESSION['admin']} order by item_id desc");
-                            for($i=0; $i<$fetch_item_no; $i++){
+                            $fetch_item = $db_handle->runQuery("select * from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
+                            $fetch_item_no = $db_handle->numRows("select * from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
+                            for ($i = 0; $i < $fetch_item_no; $i++) {
                                 ?>
                                 <tr>
-                                    <th><?php echo $i+1;?></th>
-                                    <td><?php echo $fetch_item[$i]['item_name'];?></td>
-                                    <td><?php echo $fetch_item[$i]['item_price'];?></td>
-                                    <td><?php echo $fetch_item[$i]['short_desc'];?></td>
+                                    <th><?php echo $i + 1; ?></th>
+                                    <td><?php echo $fetch_item[$i]['item_name']; ?></td>
+                                    <td><?php echo $fetch_item[$i]['item_price']; ?></td>
+                                    <td><?php echo $fetch_item[$i]['category_name']; ?></td>
+                                    <td><?php echo $fetch_item[$i]['short_desc']; ?></td>
                                     <td><?php
-                                        if($fetch_item[$i]['status'] == 1){
+                                        if ($fetch_item[$i]['status'] == 1) {
                                             ?>
-                                            <a href="Update?item_id=<?php echo $fetch_item[$i]['item_id'];?>&status=0" class="dflt-btn success">Active</a>
+                                            <a href="Update?item_id=<?php echo $fetch_item[$i]['item_id']; ?>&status=0"
+                                               class="dflt-btn success">Active</a>
                                             <?php
                                         } else {
                                             ?>
-                                            <a href="Update?item_id=<?php echo $fetch_item[$i]['item_id'];?>&status=1" class="dflt-btn danger">Deactive</a>
+                                            <a href="Update?item_id=<?php echo $fetch_item[$i]['item_id']; ?>&status=1"
+                                               class="dflt-btn danger">Deactive</a>
                                             <?php
                                         }
                                         ?>
 
                                     </td>
-                                    <td><a href="Item?edit=<?php echo $fetch_item[$i]['item_id'];?>"><i class="zmdi zmdi-edit"></i></a></td>
+                                    <td><a href="Item?edit=<?php echo $fetch_item[$i]['item_id']; ?>"><i
+                                                    class="zmdi zmdi-edit"></i></a></td>
                                 </tr>
                                 <?php
                             }
