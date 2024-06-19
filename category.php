@@ -68,7 +68,7 @@ $today = date("Y-m-d");
                     </div>
                     <?php
                     unset($_SESSION['alert']);
-                } if($_SESSION['alert'] == 'login_success') {
+                } if(isset($_SESSION['alert']) && $_SESSION['alert'] == 'login_success') {
                     ?>
                     <div class="col-12">
                         <div class="alert-single-item cta2">
@@ -157,8 +157,8 @@ $today = date("Y-m-d");
                             </thead>
                             <tbody>
                             <?php
-                            $fetch_cat = $db_handle->runQuery("select * from category where user_id = {$_SESSION['admin']} order by cat_id desc");
-                            $fetch_cat_no = $db_handle->numRows("select * from category where user_id = {$_SESSION['admin']} order by cat_id desc");
+                            $fetch_cat = $db_handle->runQuery("select * from category where user_id = {$_SESSION['admin']}");
+                            $fetch_cat_no = $db_handle->numRows("select * from category where user_id = {$_SESSION['admin']}");
                             for($i=0; $i<$fetch_cat_no; $i++){
                                 ?>
                                 <tr>

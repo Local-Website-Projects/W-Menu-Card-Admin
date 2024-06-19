@@ -147,7 +147,8 @@ $today = date("Y-m-d");
                                                                 <option value="#">Select item category</option>
                                                                 <?php
                                                                 $fetch_cat = $db_handle->runQuery("select * from category where user_id = {$_SESSION['admin']} and status = 1");
-                                                                for($i=0; $i<count($fetch_cat); $i++){
+                                                                $fetch_cat_no = $db_handle->numRows("select * from category where user_id = {$_SESSION['admin']} and status = 1");
+                                                                for($i=0; $i<$fetch_cat_no; $i++){
                                                                     ?>
                                                                     <option value="<?php echo $fetch_cat[$i]['cat_id'];?>"><?php echo $fetch_cat[$i]['category_name'];?></option>
                                                                     <?php
@@ -190,8 +191,8 @@ $today = date("Y-m-d");
                             </thead>
                             <tbody>
                             <?php
-                            $fetch_item = $db_handle->runQuery("select * from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
-                            $fetch_item_no = $db_handle->numRows("select * from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
+                            $fetch_item = $db_handle->runQuery("select items.item_id, items.item_name, items.item_price, items.short_desc,items.status,category.category_name from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
+                            $fetch_item_no = $db_handle->numRows("select items.item_id, items.item_name, items.item_price, items.short_desc,items.status,category.category_name from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
                             for ($i = 0; $i < $fetch_item_no; $i++) {
                                 ?>
                                 <tr>

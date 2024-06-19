@@ -22,7 +22,8 @@ if(isset($_POST['personal_info_update'])){
     $contact_number = $db_handle->checkValue($_POST['contact_number']);
     $whatsapp = $db_handle->checkValue($_POST['whatsapp']);
     $status = $db_handle->checkValue($_POST['status']);
-    $update_info = $db_handle->insertQuery("UPDATE `users` SET `admin_name`='$full_name',`restaurant_name`='$restaurant_name',`contact_number`='$contact_number',`whatsapp`='$whatsapp',`availability`='$status',`updated_at`='$updated_at' WHERE user_id = {$_SESSION['admin']}");
+    $note = $db_handle->checkValue($_POST['note']);
+    $update_info = $db_handle->insertQuery("UPDATE `users` SET `admin_name`='$full_name',`restaurant_name`='$restaurant_name',`contact_number`='$contact_number',`whatsapp`='$whatsapp',`availability`='$status',`updated_at`='$updated_at',`note` = '$note' WHERE user_id = {$_SESSION['admin']}");
     if($update_info){
         $_SESSION['alert'] = 'success';
         echo "

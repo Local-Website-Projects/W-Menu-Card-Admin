@@ -93,6 +93,8 @@ $today = date("Y-m-d");
                                        name="contact_number" required>
                                 <p>WhatsApp Number</p>
                                 <input type="text" value="<?php echo $fetch_admin[0]['whatsapp']; ?>" name="whatsapp">
+                                <p>Note in Menu</p>
+                                <input type="text" value="<?php echo $fetch_admin[0]['note']; ?>" name="note">
                                 <p class="form-element-left-title">Restaurant Availability</p>
                                 <div class="col-lg-8">
                                     <div class="radio-btn-bottms">
