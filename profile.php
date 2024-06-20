@@ -83,18 +83,18 @@ $today = date("Y-m-d");
                             <h3 class="form-title">Basic Info</h3>
                             <form action="Update" method="post">
                                 <p>Full Name</p>
-                                <input type="text" value="<?php echo $fetch_admin[0]['admin_name']; ?>" name="full_name"
+                                <input type="text" value="<?php echo $fetch_admin[0]['admin_name']; ?>" name="full_name" autocomplete="off"
                                        required>
                                 <p>Restaurant Name</p>
-                                <input type="text" value="<?php echo $fetch_admin[0]['restaurant_name']; ?>"
+                                <input type="text" value="<?php echo $fetch_admin[0]['restaurant_name']; ?>" autocomplete="off"
                                        name="restaurant_name" required>
                                 <p>Contact Number</p>
-                                <input type="text" value="<?php echo $fetch_admin[0]['contact_number']; ?>"
+                                <input type="text" value="<?php echo $fetch_admin[0]['contact_number']; ?>" autocomplete="off"
                                        name="contact_number" required>
                                 <p>WhatsApp Number</p>
-                                <input type="text" value="<?php echo $fetch_admin[0]['whatsapp']; ?>" name="whatsapp">
+                                <input type="text" value="<?php echo $fetch_admin[0]['whatsapp']; ?>" name="whatsapp" autocomplete="off">
                                 <p>Note in Menu</p>
-                                <input type="text" value="<?php echo $fetch_admin[0]['note']; ?>" name="note">
+                                <input type="text" value="<?php echo $fetch_admin[0]['note']; ?>" name="note" autocomplete="off">
                                 <p class="form-element-left-title">Restaurant Availability</p>
                                 <div class="col-lg-8">
                                     <div class="radio-btn-bottms">
@@ -117,13 +117,13 @@ $today = date("Y-m-d");
                             <h3 class="form-title">Password Update</h3>
                             <form action="Update" method="post" id="password_update">
                                 <p>Old Password</p>
-                                <input type="password" placeholder="old password" name="old_password"
+                                <input type="password" placeholder="old password" name="old_password" autocomplete="off"
                                        required>
                                 <p>New Password</p>
-                                <input type="password" placeholder="new_password"
+                                <input type="password" placeholder="new_password" autocomplete="off"
                                        id="new_password" name="new_password" required>
                                 <p>Confirm New Password</p>
-                                <input type="password" placeholder="Confirm New Password"
+                                <input type="password" placeholder="Confirm New Password" autocomplete="off"
                                        name="confirm_password" id="confirm_new_password" required>
                                 <span id="password_match_message" style="color: red; display: none;">Password and Confirm Password do not match.</span>
                                 <input type="submit" name="confirm_new_password" value="Update">

@@ -91,7 +91,7 @@ $today = date("Y-m-d");
                         <div class="form-basic form-shadow">
                             <form action="Update" method="post">
                                 <p>Category Name</p>
-                                <input type="text" name="cat_name" value="<?php echo $cat[0]['category_name'];?>"
+                                <input type="text" name="cat_name" value="<?php echo $cat[0]['category_name'];?>" autocomplete="off"
                                        required>
                                 <input type="hidden" value="<?php echo $_GET['edit']?>" name="cat_id">
                                 <input type="submit" name="category_edit" value="Update Category">
@@ -127,7 +127,7 @@ $today = date("Y-m-d");
                                                 <div class="form-basic form-shadow">
                                                     <form action="Insert" method="post" id="password_update">
                                                         <p>Category Name</p>
-                                                        <input type="text" placeholder="Category Name" name="cat_name"
+                                                        <input type="text" placeholder="Category Name" name="cat_name" autocomplete="off"
                                                                required>
                                                         <input type="submit" name="add_category" value="Add Category">
                                                     </form>

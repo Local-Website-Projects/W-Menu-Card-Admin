@@ -83,10 +83,10 @@ $today = date("Y-m-d");
                             <form action="Update" method="post">
                                 <p>Item Name</p>
                                 <input type="hidden" value="<?php echo $_GET['edit']; ?>" name="item_id">
-                                <input type="text" value="<?php echo $items[0]['item_name']; ?>" name="item_name"
+                                <input type="text" value="<?php echo $items[0]['item_name']; ?>" name="item_name" autocomplete="off"
                                        required>
                                 <p>Item Price</p>
-                                <input type="text" value="<?php echo $items[0]['item_price']; ?>" name="item_price"
+                                <input type="text" value="<?php echo $items[0]['item_price']; ?>" name="item_price" autocomplete="off"
                                        required>
                                 <p>Select Category</p>
                                 <select name="cat_id" class="form-control" required>
@@ -101,7 +101,7 @@ $today = date("Y-m-d");
                                     ?>
                                 </select>
                                 <p>Short Description</p>
-                                <input type="text" value="<?php echo $items[0]['short_desc']; ?>" name="short_desc"
+                                <input type="text" value="<?php echo $items[0]['short_desc']; ?>" name="short_desc" autocomplete="off"
                                        required>
                                 <input type="submit" name="update_item" value="Update Item">
                             </form>
@@ -137,10 +137,10 @@ $today = date("Y-m-d");
                                                 <div class="form-basic form-shadow">
                                                     <form action="Insert" method="post">
                                                         <p>Item Name</p>
-                                                        <input type="text" placeholder="Item Name" name="item_name"
+                                                        <input type="text" placeholder="Item Name" name="item_name" autocomplete="off"
                                                                required>
                                                         <p>Item Price</p>
-                                                        <input type="text" placeholder="Item Price" name="item_price"
+                                                        <input type="text" placeholder="Item Price" name="item_price" autocomplete="off"
                                                                required>
                                                         <p>Select Category</p>
                                                             <select name="cat_id" class="form-control" required>
@@ -157,7 +157,7 @@ $today = date("Y-m-d");
                                                             </select>
                                                         <p>Short Description</p>
                                                         <input type="text" placeholder="Short Description"
-                                                               name="short_desc"
+                                                               name="short_desc" autocomplete="off"
                                                                required>
                                                         <input type="submit" name="add_item" value="Add Item">
                                                     </form>
