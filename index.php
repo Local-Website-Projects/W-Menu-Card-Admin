@@ -5,6 +5,17 @@ $db_handle = new DBController();
 date_default_timezone_set("Asia/Dhaka");
 $inserted_at = date("Y-m-d H:i:s");
 $today = date("Y-m-d");
+
+if(isset($_GET['id']) && $_GET['id'] != ""){
+    $update_status = $db_handle->insertQuery("UPDATE `users` SET `status`={$_GET['status']} WHERE `user_id`={$_GET['id']}");
+    if($update_status){
+        $_SESSION['alert'] = 'success';
+        echo "<script>window.location.href = 'Home';</script>";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "<script>window.location.href = 'Home';</script>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +60,7 @@ $today = date("Y-m-d");
             <div class="container-fluid">
                 <div class="row">
                     <?php
-                    if(isset($_SESSION['alert']) && $_SESSION['alert'] == 'success'){
+                    if(isset($_SESSION['alert']) && $_SESSION['alert'] == 'login_success'){
                         ?>
                         <div class="col-12">
                             <div class="alert-single-item cta2">
@@ -58,7 +69,17 @@ $today = date("Y-m-d");
                         </div>
                         <?php
                         unset($_SESSION['alert']);
-                    } ?>
+                    }
+                    if(isset($_SESSION['alert']) && $_SESSION['alert'] == 'success'){
+                        ?>
+                        <div class="col-12">
+                            <div class="alert-single-item cta2">
+                                <h4>Request performed successfully<span class="alert-close"><i class="zmdi zmdi-close"></i></span></h4>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
                     <div class="col-md-12">
                         <h2>Dashboard</h2>
                     </div>
@@ -66,42 +87,54 @@ $today = date("Y-m-d");
                 <div class="row">
                     <div class="col-lg-3 col-6">
                         <div class="homepage-sec1-single">
-                            <span class="sec_icon"><i class="zmdi zmdi-money"></i></span>
+                            <span class="sec_icon"><i class="zmdi zmdi-accounts"></i></span>
                             <div class="homepage-sec1-fl-right">
-                                <h4>Daily sales</h4>
-                                <h3>$30, <span class="single-count">305</span></h3>
+                                <h4>Total Register Restaurant</h4>
+                                <?php
+                                $total_restaurant = $db_handle->runQuery("select COUNT(user_id) as num from users where type = 1");
+                                ?>
+                                <h3><?php echo $total_restaurant[0]['num'];?></h3>
                             </div>
-                            <p>Total items sold <span class="fl_right">GOOD <i class="zmdi zmdi-long-arrow-up"></i></span></p>
+                            <p>Total Restaurant</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-6">
                         <div class="homepage-sec1-single cta2">
                             <span class="sec_icon"><i class="zmdi zmdi-accounts"></i></span>
                             <div class="homepage-sec1-fl-right">
-                                <h4>Visitors</h4>
-                                <h3>75,<span class="single-count">843</span></h3>
+                                <h4>Total Items</h4>
+                                <?php
+                                $total_items = $db_handle->runQuery("select COUNT(item_id) as item from items");
+                                ?>
+                                <h3><?php echo $total_items[0]['item'];?></h3>
                             </div>
-                            <p>Visitors <span class="fl_right">NORMAL <i class="zmdi zmdi-long-arrow-down"></i></span></p>
+                            <p>Total items</span></p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-6">
                         <div class="homepage-sec1-single cta3">
                             <span class="sec_icon"><i class="zmdi zmdi-email"></i></span>
                             <div class="homepage-sec1-fl-right">
-                                <h4>Messages</h4>
-                                <h3><span class="single-count">1224</span></h3>
+                                <h4>Total Active Restaurant</h4>
+                                <?php
+                                $total_restaurant = $db_handle->runQuery("select COUNT(user_id) as avl from users where type = 1 and availability = 1");
+                                ?>
+                                <h3><?php echo $total_restaurant[0]['avl'];?></h3>
                             </div>
-                            <p>Last month <span class="fl_right">NORMAL <i class="zmdi zmdi-long-arrow-down"></i></span></p>
+                            <p>Total active restaurant</span></p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-6">
                         <div class="homepage-sec1-single cta4">
                             <span class="sec_icon"><i class="zmdi zmdi-favorite"></i></span>
                             <div class="homepage-sec1-fl-right">
-                                <h4>Followers</h4>
-                                <h3>+<span class="single-count">38</span>K</h3>
+                                <h4>Total Active Items</h4>
+                                <?php
+                                $total_items = $db_handle->runQuery("select COUNT(item_id) as item from items where status = 1");
+                                ?>
+                                <h3><?php echo $total_items[0]['item'];?></h3>
                             </div>
-                            <p>Update now<span class="fl_right">UPDATE <i class="zmdi zmdi-refresh"></i></span></p>
+                            <p>Total active items</p>
                         </div>
                     </div>
                 </div>
@@ -111,168 +144,11 @@ $today = date("Y-m-d");
         <!--  Homepage sec 2 start -->
         <div class="homepage-sec2">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-9">
-                        <div class="home-line-chart">
-                            <h3>Weekly stats</h3>
-                            <canvas id="lineChart"></canvas>
-                        </div>
-                        <div class="home_map_area">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="box-body">
-                                        <div id="world-map" style="height: 250px; width: 100%;"></div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="home_gl_table">
-                                        <h3>Global sales</h3>
-                                        <table class="home_gl_table_row">
-                                            <thead>
-                                                <tr>
-                                                    <th class="gl_table">
-                                                        <img src="assets/img/global-sales-icon1.png" alt="">
-                                                    </th>
-                                                    <th class="gl_table"><span class="float-left_">USA</span></th>
-                                                    <th class="gl_table"><span class="center_">2.920</span></th>
-                                                    <th class="gl_table"><span class=" float-right_">54.18%</span></th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                        <table class="home_gl_table_row">
-                                            <thead>
-                                                <tr>
-                                                    <th class="gl_table">
-                                                        <img src="assets/img/global-sales-icon2.png" alt="">
-                                                    </th>
-                                                    <th class="gl_table"><span class="float-left_">Germany</span></th>
-                                                    <th class="gl_table"><span class="center_">2.920</span></th>
-                                                    <th class="gl_table"><span class=" float-right_">21.53%</span></th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                        <table class="home_gl_table_row">
-                                            <thead>
-                                                <tr>
-                                                    <th class="gl_table">
-                                                        <img src="assets/img/global-sales-icon3.png" alt="">
-                                                    </th>
-                                                    <th class="gl_table"><span class="float-left_">France</span></th>
-                                                    <th class="gl_table"><span class="center_">2.920</span></th>
-                                                    <th class="gl_table"><span class=" float-right_">13.86%</span></th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                        <table class="home_gl_table_row">
-                                            <thead>
-                                                <tr>
-                                                    <th class="gl_table">
-                                                        <img src="assets/img/global-sales-icon4.png" alt="">
-                                                    </th>
-                                                    <th class="gl_table"><span class="float-left_">United-kingdom</span></th>
-                                                    <th class="gl_table"><span class="center_">2.920</span></th>
-                                                    <th class="gl_table"><span class=" float-right_">07.37%</span></th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                        <table class="home_gl_table_row">
-                                            <thead>
-                                                <tr>
-                                                    <th class="gl_table">
-                                                        <img src="assets/img/global-sales-icon5.png" alt="">
-                                                    </th>
-                                                    <th class="gl_table"><span class="float-left_">Brazil</span></th>
-                                                    <th class="gl_table"><span class="center_">2.920</span></th>
-                                                    <th class="gl_table"><span class=" float-right_">03.23%</span></th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="home_bar">
-                            <canvas id="barChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="home_right_client">
-                            <h3>New Client</h3>
-                            <div class="home_right_single_cl">
-                                <img src="assets/img/client-img1.png" alt="">
-                                <div class="home_client_text">
-                                    <h5><a href="#"> Dickens</a></h5>
-                                    <p>10 Minit ago</p>
-                                </div>
-                            </div>
-                            <div class="home_right_single_cl">
-                                <img src="assets/img/client-img2.png" alt="">
-                                <div class="home_client_text">
-                                    <h5> <a href="#">Powlowski</a></h5>
-                                    <p>5 Minit ago</p>
-                                </div>
-                            </div>
-                            <div class="home_right_single_cl">
-                                <img src="assets/img/client-img3.png" alt="">
-                                <div class="home_client_text">
-                                    <h5><a href="#">Mathew </a></h5>
-                                    <p>6 Minit ago</p>
-                                </div>
-                            </div>
-                            <div class="home_right_single_cl">
-                                <img src="assets/img/client-img4.png" alt="">
-                                <div class="home_client_text">
-                                    <h5><a href="#">Alice</a></h5>
-                                    <p>8 Minit ago</p>
-                                </div>
-                            </div>
-                            <div class="home_right_single_cl">
-                                <img src="assets/img/client-img5.png" alt="">
-                                <div class="home_client_text">
-                                    <h5><a href="#">Delbert</a></h5>
-                                    <p>12 Minit ago</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="home_right_pie">
-                            <h3>Email Statistics</h3>
-                            <canvas id="Homepie" style="width: 200px; height: 200px;"></canvas>
-                        </div>
-                        <div class="home_right_admin text-center">
-                            <img src="assets/img/home-right-admin-img.png" alt="">
-                            <h5>Susana Weber</h5>
-                            <p>Ui Designer at Crazycafe</p>
-                            <span>London, United Kingdom</span>
-                            <div class="home_right-admin_social">
-                                <a href="#"><i class="zmdi zmdi-facebook"></i></a>
-                                <a href="#"><i class="zmdi zmdi-google-plus"></i></a>
-                                <a href="#"><i class="zmdi zmdi-twitter"></i></a>
-                                <a href="#"><i class="zmdi zmdi-linkedin"></i></a>
-                            </div>
-                            <a href="#" class="home_right_a_btn">View profile</a>
-                            <a href="#" class="home_right_a_btn">Edit profile</a>
-                            <div class="home_right_admin-count">
-                                <div class="home_right_single_count">
-                                    <h4 class="s_count">55</h4>
-                                    <p>Reiview</p>
-                                </div>
-                                <div class="home_right_single_count">
-                                    <h4 class="s_count">83</h4>
-                                    <p>Clients</p>
-                                </div>
-                                <div class="home_right_single_count">
-                                    <h4 class="s_count">360</h4>
-                                    <p>Followers</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="home_table_area form-shadow">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="home_table_title">
-                                <h3>Latest Projects</h3>
+                                <h3>Latest Restaurants</h3>
                             </div>
                         </div>
                     </div>
@@ -282,55 +158,54 @@ $today = date("Y-m-d");
                                 <table class="responsive-table-input-matrix">
                                     <thead>
                                         <tr>
-                                            <th>Project Id</th>
-                                            <th>Project Name</th>
-                                            <th>Start Date</th>
-                                            <th>Due Date</th>
+                                            <th>Sl</th>
+                                            <th>User Name</th>
+                                            <th>Restaurant Name</th>
+                                            <th>Phone</th>
+                                            <th>Whatsapp</th>
+                                            <th>Registration Date</th>
+                                            <th>Bill Due Date</th>
                                             <th>Status</th>
-                                            <th>Assign</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <?php
+                                    $fetch_all_user = $db_handle->runQuery("select * from users where type = 1 order by user_id desc");
+                                    $fetch_all_user_no = $db_handle->numRows("select * from users where type = 1 order by user_id desc");
+                                    for($i=0; $i<$fetch_all_user_no; $i++){
+                                        ?>
                                         <tr>
-                                            <td>01</td>
-                                            <td>Web design</td>
-                                            <td>01 Jan 2018</td>
-                                            <td>12 Jan 2018</td>
-                                            <td><a class="active_c" href="#">Active</a></td>
-                                            <td>Turcotte</td>
+                                            <td><?php echo $i+1;?></td>
+                                            <td><?php echo $fetch_all_user[$i]['admin_name'];?></td>
+                                            <td><?php echo $fetch_all_user[$i]['restaurant_name'];?></td>
+                                            <td><?php echo $fetch_all_user[$i]['contact_number'];?></td>
+                                            <td><?php echo $fetch_all_user[$i]['whatsapp'];?></td>
+                                            <td><?php
+                                                $registration_date = $fetch_all_user[$i]['registration_date'];
+                                                $dateObj = new DateTime($registration_date);
+                                                $formatted_date = $dateObj->format('d F, Y');
+                                                echo $formatted_date;?></td>
+                                            <td><?php $registration_date = $fetch_all_user[$i]['registration_date'];
+                                                $dateObj = new DateTime($registration_date);
+                                                $formatted_date = $dateObj->format('d');
+                                                echo $formatted_date;?><sup>th</sup> Per Month</td>
+                                            <?php
+                                            if($fetch_all_user[$i]['status'] == 0){
+                                                ?>
+                                                <td><a class=cooming_soon href="Home?id=<?php echo $fetch_all_user[$i]['user_id'];?>&status=1">Deactive</a></td>
+                                                <?php
+                                            } if($fetch_all_user[$i]['status'] == 1){
+                                                ?>
+                                                <td><a class="active_c" href="Home?id=<?php echo $fetch_all_user[$i]['user_id'];?>&status=0">Active</a></td>
+                                                <?php
+                                            }
+                                            ?>
+
                                         </tr>
-                                        <tr>
-                                            <td>02</td>
-                                            <td>App design</td>
-                                            <td>03 May 2018</td>
-                                            <td>23 Jul 2018</td>
-                                            <td><a class="active_c" href="#">Active</a></td>
-                                            <td>Legros</td>
-                                        </tr>
-                                        <tr>
-                                            <td>03</td>
-                                            <td>Deshboard design</td>
-                                            <td>23 Feb 2018</td>
-                                            <td>12 Mar 2018</td>
-                                            <td><a class="cooming_soon" href="#">Disabaled</a></td>
-                                            <td>Parker</td>
-                                        </tr>
-                                        <tr>
-                                            <td>04</td>
-                                            <td>Product design</td>
-                                            <td>23 Jul 2018</td>
-                                            <td>26 Aug 2018</td>
-                                            <td><a class="progres" href="#">Suspended</a></td>
-                                            <td>Harber</td>
-                                        </tr>
-                                        <tr>
-                                            <td>05</td>
-                                            <td>E-comerce design</td>
-                                            <td>13 Jul 2018</td>
-                                            <td>19 Sep 2018</td>
-                                            <td><a class="active_c" href="#">Active</a></td>
-                                            <td>Beatty</td>
-                                        </tr>
+                                        <?php
+                                    }
+                                    ?>
+
                                     </tbody>
                                 </table>
                             </div>

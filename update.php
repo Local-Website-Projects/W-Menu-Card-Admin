@@ -178,3 +178,30 @@ if(isset($_POST['update_item'])){
         echo "<script>window.location.href='Item';</script>";
     }
 }
+
+
+if(isset($_GET['location_id'])){
+    $location_id = $_GET['location_id'];
+    $status = $_GET['status'];
+    $update_location_status = $db_handle->insertQuery("UPDATE `locations` SET `status`='$status',`updated_at`='$updated_at' WHERE `location_id` = '$location_id'");
+    if($update_location_status){
+        $_SESSION['alert'] = 'success';
+        echo "<script>window.location.href='Locations';</script>";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "<script>window.location.href='Locations';</script>";
+    }
+}
+
+if(isset($_POST['location_edit'])){
+    $location_name = $db_handle->checkValue($_POST['location_name']);
+    $location_id = $db_handle->checkValue($_POST['location_id']);
+    $update_location = $db_handle->insertQuery("UPDATE `locations` SET `location_name`='$location_name',`updated_at`='$updated_at' WHERE `location_id` = '$location_id'");
+    if($update_location){
+        $_SESSION['alert'] = 'success';
+        echo "<script>window.location.href='Locations';</script>";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "<script>window.location.href='Locations';</script>";
+    }
+}

@@ -8,28 +8,32 @@ $_SESSION['alert'] = '';
 if(isset($_POST['login'])){
     $email = $db_handle->checkValue($_POST['email']);
     $password = $db_handle->checkValue($_POST['password']);
-    $select_user = $db_handle->runQuery("select * from users where admin_email = '$email' and status = '1'");
+    $select_user = $db_handle->runQuery("select * from users where admin_email = '$email'");
     if(count($select_user) > 0) {
-        $hashed_password = $select_user[0]['admin_password'];
-        if (password_verify($password, $hashed_password)) {
-            $_SESSION['admin'] = $select_user[0]['user_id'];
-            $_SESSION['alert'] = 'login_success';
-            if($select_user[0]['type'] == '1'){
-                echo "
+        if($select_user[0]['status'] == 1){
+            $hashed_password = $select_user[0]['admin_password'];
+            if (password_verify($password, $hashed_password)) {
+                $_SESSION['admin'] = $select_user[0]['user_id'];
+                $_SESSION['alert'] = 'login_success';
+                if($select_user[0]['type'] == '1'){
+                    echo "
         <script>
         window.location.href = 'Category';
 </script>
         ";
-            } else {
-                echo "
+                } else {
+                    echo "
         <script>
         window.location.href = 'Home';
 </script>
         ";
-            }
+                }
 
+            } else {
+                $_SESSION['alert'] = 'error';
+            }
         } else {
-            $_SESSION['alert'] = 'error';
+            $_SESSION['alert'] = 'status-error';
         }
     } else {
         $_SESSION['alert'] = 'error-email';
@@ -83,6 +87,14 @@ if(isset($_POST['login'])){
                         ?>
                         <div class="alert-single-item cta5">
                             <h4>Sorry - Email does not match. <span class="alert-close"><i class="zmdi zmdi-close"></i></span></h4>
+                        </div>
+                        <?php
+                        unset($_SESSION['alert']);
+                    }
+                    if($_SESSION['alert'] == 'status-error'){
+                        ?>
+                        <div class="alert-single-item cta5">
+                            <h4>Sorry - Your account request is not accepted yet. <span class="alert-close"><i class="zmdi zmdi-close"></i></span></h4>
                         </div>
                         <?php
                         unset($_SESSION['alert']);

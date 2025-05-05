@@ -17,6 +17,13 @@
                         <span class="dnl-link-text">Dashboard</span>
                     </a>
                 </li>
+                <li class="active-cta">
+                    <a href="Locations">
+                        <span class="dnl-link-icon"></span>
+                        <img src="assets/svg/nav-icon3.svg" alt="">
+                        <span class="dnl-link-text">Locations</span>
+                    </a>
+                </li>
                 <?php
             }
             ?>

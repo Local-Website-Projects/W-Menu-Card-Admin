@@ -44,3 +44,17 @@ if(isset($_POST['add_item'])){
         echo "<script>window.location.href = 'Item';</script>";
     }
 }
+
+
+if(isset($_POST['add_location'])){
+    $location = $db_handle->checkValue($_POST['location']);
+
+    $insert_item = $db_handle->insertQuery("INSERT INTO `locations`(`location_name`, `inserted_at`) VALUES ('$location','$inserted_at')");
+    if($insert_item){
+        $_SESSION['alert'] = 'success';
+        echo "<script>window.location.href = 'Locations';</script>";
+    } else {
+        $_SESSION['alert'] = 'danger';
+        echo "<script>window.location.href = 'Locations';</script>";
+    }
+}

@@ -4257,7 +4257,8 @@ span.fc-title {
 
 .register-form input[type="text"],
 .register-form input[type="email"],
-.register-form input[type="password"] {
+.register-form input[type="password"],
+.register-form select{
     color: #999999;
     width: 100%;
     border: 1px solid #d6d6d6;

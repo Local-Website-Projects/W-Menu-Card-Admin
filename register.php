@@ -10,6 +10,7 @@ $result = 0;
 if (isset($_POST['registration'])) {
     $user_name = $db_handle->checkValue($_POST['user_name']);
     $restaurant_name = $db_handle->checkValue($_POST['restaurant_name']);
+    $location = $db_handle->checkValue($_POST['location']);
     $email = $db_handle->checkValue($_POST['email']);
     $contact_number = $db_handle->checkValue($_POST['contact_number']);
     $whatsapp = $db_handle->checkValue($_POST['whatsapp']);
@@ -20,7 +21,8 @@ if (isset($_POST['registration'])) {
     if($check_email > 0){
         $result = 1;
     }else {
-        $register_user = $db_handle->insertQuery("INSERT INTO `users`(`admin_name`, `restaurant_name`, `registration_date`, `admin_email`, `admin_password`, `status`, `type`, `inserted_at`,`contact_number`,`whatsapp` ) VALUES ('$user_name','$restaurant_name','$today','$email','$hashed_password','0','1','$inserted_at','$contact_number','$whatsapp')");
+        $register_user = $db_handle->insertQuery("INSERT INTO `users`(`admin_name`, `restaurant_name`, `location` , `registration_date`, `admin_email`, `admin_password`, `status`, `type`, `inserted_at`,`contact_number`,`whatsapp` )
+VALUES ('$user_name','$restaurant_name','$location','$today','$email','$hashed_password','0','1','$inserted_at','$contact_number','$whatsapp')");
         if($register_user){
             $result = 2;
         } else {
@@ -100,6 +102,19 @@ if (isset($_POST['registration'])) {
                             <input type="text" name="user_name" placeholder="enter your full name" required>
                             <p>Restaurant Name *</p>
                             <input type="text" name="restaurant_name" placeholder="restaurant name" required>
+                            <p>Restaurant Location *</p>
+                            <select name="location" required>
+                                <option value="0" selected>Select Your Restaurant Location</option>
+                                <?php
+                                $fetch_location = $db_handle->runQuery("select * from locations");
+                                $fetch_location_no = $db_handle->numRows("select * from locations");
+                                for($i=0; $i<$fetch_location_no; $i++){
+                                    ?>
+                                    <option value="<?php echo $fetch_location[$i]['location_id'];?>"><?php echo $fetch_location[$i]['location_name'];?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
                             <p>Email address *</p>
                             <input type="email" id="email" name="email" placeholder="email address" required>
                             <span id="emailCheckMessage" style="color: red"></span>

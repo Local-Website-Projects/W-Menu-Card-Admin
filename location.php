@@ -17,7 +17,7 @@ $today = date("Y-m-d");
     <!-- FAVICON -->
     <link rel="icon" href="assets/img/favicon.png">
     <!--   Title Page -->
-    <title>Food Menu Admin - Category</title>
+    <title>Food Menu Admin - Locations</title>
     <?php include('include/css.php'); ?>
 </head>
 
@@ -52,7 +52,7 @@ $today = date("Y-m-d");
                     <div class="col-12">
                         <div class="alert-single-item cta2">
                             <h4>Success - Data Updated Successful<span class="alert-close"><i
-                                            class="zmdi zmdi-close"></i></span></h4>
+                                        class="zmdi zmdi-close"></i></span></h4>
                         </div>
                     </div>
                     <?php
@@ -63,7 +63,7 @@ $today = date("Y-m-d");
                     <div class="col-12">
                         <div class="alert-single-item cta5">
                             <h4>Sorry - Something went wrong<span class="alert-close"><i
-                                            class="zmdi zmdi-close"></i></span></h4>
+                                        class="zmdi zmdi-close"></i></span></h4>
                         </div>
                     </div>
                     <?php
@@ -73,7 +73,7 @@ $today = date("Y-m-d");
                     <div class="col-12">
                         <div class="alert-single-item cta2">
                             <h4>Welcome Back<span class="alert-close"><i
-                                            class="zmdi zmdi-close"></i></span></h4>
+                                        class="zmdi zmdi-close"></i></span></h4>
                         </div>
                     </div>
                     <?php
@@ -83,18 +83,18 @@ $today = date("Y-m-d");
 
             <?php
             if(isset($_GET['edit'])){
-                $cat = $db_handle->runQuery("select * from category where cat_id = {$_GET['edit']}");
+                $cat = $db_handle->runQuery("select * from locations where location_id = {$_GET['edit']}");
                 ?>
                 <div class="row">
                     <div class="col-12">
-                        <h3>Edit Category</h3>
+                        <h3>Edit Location</h3>
                         <div class="form-basic form-shadow">
                             <form action="Update" method="post">
-                                <p>Category Name</p>
-                                <input type="text" name="cat_name" value="<?php echo $cat[0]['category_name'];?>" autocomplete="off"
+                                <p>Location</p>
+                                <input type="text" name="location_name" value="<?php echo $cat[0]['location_name'];?>" autocomplete="off"
                                        required>
-                                <input type="hidden" value="<?php echo $_GET['edit']?>" name="cat_id">
-                                <input type="submit" name="category_edit" value="Update Category">
+                                <input type="hidden" value="<?php echo $_GET['edit']?>" name="location_id">
+                                <input type="submit" name="location_edit" value="Update Location">
                             </form>
                         </div>
                     </div>
@@ -105,12 +105,12 @@ $today = date("Y-m-d");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="modal-top cta2">
-                            <h3>Category</h3>
+                            <h3>Locations</h3>
                             <div class="notification-right3">
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                         data-target="#exampleModal22">
-                                    Add Category
+                                    Add Location
                                 </button>
                                 <!-- Modal -->
                                 <div class="modal modal-center fade" id="exampleModal22" tabindex="-1" role="dialog"
@@ -118,18 +118,18 @@ $today = date("Y-m-d");
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLongTitle22">Add Category</h5>
+                                                <h5 class="modal-title" id="exampleModalLongTitle22">Add Location</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="form-basic form-shadow">
-                                                    <form action="Insert" method="post" id="password_update">
-                                                        <p>Category Name</p>
-                                                        <input type="text" placeholder="Category Name" name="cat_name" autocomplete="off"
+                                                    <form action="Insert" method="post">
+                                                        <p>Location</p>
+                                                        <input type="text" placeholder="Location" name="location" autocomplete="off"
                                                                required>
-                                                        <input type="submit" name="add_category" value="Add Category">
+                                                        <input type="submit" name="add_location" value="Add Location">
                                                     </form>
                                                 </div>
                                             </div>
@@ -150,34 +150,34 @@ $today = date("Y-m-d");
                             <thead>
                             <tr>
                                 <th scope="col">Sl No</th>
-                                <th scope="col">Category Name</th>
+                                <th scope="col">Location</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php
-                            $fetch_cat = $db_handle->runQuery("select * from category where user_id = {$_SESSION['admin']}");
-                            $fetch_cat_no = $db_handle->numRows("select * from category where user_id = {$_SESSION['admin']}");
+                            $fetch_cat = $db_handle->runQuery("select * from locations order by location_id desc");
+                            $fetch_cat_no = $db_handle->numRows("select * from locations order by location_id desc");
                             for($i=0; $i<$fetch_cat_no; $i++){
                                 ?>
                                 <tr>
                                     <th><?php echo $i+1;?></th>
-                                    <td><?php echo $fetch_cat[$i]['category_name'];?></td>
+                                    <td><?php echo $fetch_cat[$i]['location_name'];?></td>
                                     <td><?php
                                         if($fetch_cat[$i]['status'] == 1){
                                             ?>
-                                            <a href="Update?id=<?php echo $fetch_cat[$i]['cat_id'];?>&status=0" class="dflt-btn success">Active</a>
+                                            <a href="Update?location_id=<?php echo $fetch_cat[$i]['location_id'];?>&status=0" class="dflt-btn success">Active</a>
                                             <?php
                                         } else {
                                             ?>
-                                            <a href="Update?id=<?php echo $fetch_cat[$i]['cat_id'];?>&status=1" class="dflt-btn danger">Deactive</a>
+                                            <a href="Update?location_id=<?php echo $fetch_cat[$i]['location_id'];?>&status=1" class="dflt-btn danger">Deactive</a>
                                             <?php
                                         }
                                         ?>
 
                                     </td>
-                                    <td><a href="Category?edit=<?php echo $fetch_cat[$i]['cat_id'];?>"><i class="zmdi zmdi-edit"></i></a></td>
+                                    <td><a href="Locations?edit=<?php echo $fetch_cat[$i]['location_id'];?>"><i class="zmdi zmdi-edit"></i></a></td>
                                 </tr>
                                 <?php
                             }
