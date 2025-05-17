@@ -41,6 +41,8 @@ if(isset($_POST['personal_info_update'])){
     }
 }
 
+
+
 if(isset($_POST['confirm_new_password'])){
     $old_password = $db_handle->checkValue($_POST['old_password']);
     $new_password = $db_handle->checkValue($_POST['new_password']);
@@ -66,6 +68,8 @@ if(isset($_POST['confirm_new_password'])){
         ";
     }
 }
+
+
 
 if(isset($_POST['update_contact_info'])){
     $address = $db_handle->checkValue($_POST['address']);
@@ -117,25 +121,74 @@ if(isset($_POST['update_contact_info'])){
 }
 
 
-if(isset($_POST['category_edit'])){
+// Image compression function
+function compressImage($source, $destination, $quality, $file_type) {
+    if ($file_type == 'jpeg' || $file_type == 'jpg') {
+        $image = imagecreatefromjpeg($source);
+        imagejpeg($image, $destination, $quality);
+    } elseif ($file_type == 'png') {
+        $image = imagecreatefrompng($source);
+        imagepng($image, $destination, 9); // max compression for PNG
+    } elseif ($file_type == 'gif') {
+        $image = imagecreatefromgif($source);
+        imagegif($image, $destination);
+    }
+}
+
+if (isset($_POST['category_edit'])) {
     $cat_id = $db_handle->checkValue($_POST['cat_id']);
     $cat_name = $db_handle->checkValue($_POST['cat_name']);
-    $update_cat = $db_handle->insertQuery("UPDATE `category` SET `category_name`='$cat_name',`updated_at`='$updated_at' WHERE cat_id = '$cat_id'");
-    if($update_cat){
+    $image = '';
+    $query = '';
+    $updated_at = date("Y-m-d H:i:s"); // You can set this however you prefer
+
+    if (!empty($_FILES['cat_image']['name'])) {
+        $original_file_name = $_FILES['cat_image']['name'];
+        $file_tmp = $_FILES['cat_image']['tmp_name'];
+        $file_size = $_FILES['cat_image']['size'];
+        $file_ext = strtolower(pathinfo($original_file_name, PATHINFO_EXTENSION));
+
+        // Allowed extensions
+        $allowed_ext = ['jpg', 'jpeg', 'png', 'gif'];
+
+        // Check if file is an actual image
+        $check = getimagesize($file_tmp);
+
+        if ($check !== false && in_array($file_ext, $allowed_ext)) {
+            // Generate a safe random filename
+            $RandomAccountNumber = mt_rand(1, 99999);
+            $safe_file_name = preg_replace("/[^a-zA-Z0-9.]/", "_", $original_file_name);
+            $file_name = $RandomAccountNumber . "_" . $safe_file_name;
+            $destination_path = "cat_image/" . $file_name;
+
+            // Delete old image if exists
+            $data = $db_handle->runQuery("SELECT * FROM `category` WHERE cat_id ='{$cat_id}'");
+            if (!empty($data[0]['cat_image']) && file_exists($data[0]['cat_image'])) {
+                unlink($data[0]['cat_image']);
+            }
+
+            // Compress and move new image
+            compressImage($file_tmp, $destination_path, 85, $file_ext);
+            $image = $destination_path;
+            $query .= ", `cat_image`='" . $image . "'";
+        } else {
+            $_SESSION['alert'] = 'danger';
+            echo "<script>alert('Invalid image file.'); window.location.href = 'Category';</script>";
+            exit();
+        }
+    }
+
+    // Update category
+    $update_cat = $db_handle->insertQuery("UPDATE `category` SET `category_name`='$cat_name', `updated_at`='$updated_at' $query WHERE cat_id = '$cat_id'");
+
+    if ($update_cat) {
         $_SESSION['alert'] = 'success';
-        echo "
-        <script>
-        window.location.href = 'Category';
-</script>
-        ";
     } else {
         $_SESSION['alert'] = 'danger';
-        echo "
-        <script>
-        window.location.href = 'Category';
-</script>
-        ";
     }
+
+    echo "<script>window.location.href = 'Category';</script>";
+    exit();
 }
 
 
@@ -169,7 +222,45 @@ if(isset($_POST['update_item'])){
     $short_desc = $db_handle->checkValue($_POST['short_desc']);
     $item_id = $db_handle->checkValue($_POST['item_id']);
     $cat_id = $db_handle->checkValue($_POST['cat_id']);
-    $update_item = $db_handle->insertQuery("UPDATE `items` SET `item_name`='$item_name',`item_price`='$item_price',`short_desc`='$short_desc',`updated_at`='$updated_at',`cat_id` = '$cat_id' WHERE item_id = '$item_id'");
+    $image = '';
+    $query = '';
+    if (!empty($_FILES['item_image']['name'])) {
+        $original_file_name = $_FILES['item_image']['name'];
+        $file_tmp = $_FILES['item_image']['tmp_name'];
+        $file_size = $_FILES['item_image']['size'];
+        $file_ext = strtolower(pathinfo($original_file_name, PATHINFO_EXTENSION));
+
+        // Allowed extensions
+        $allowed_ext = ['jpg', 'jpeg', 'png', 'gif'];
+
+        // Check if file is an actual image
+        $check = getimagesize($file_tmp);
+
+        if ($check !== false && in_array($file_ext, $allowed_ext)) {
+            // Generate a safe random filename
+            $RandomAccountNumber = mt_rand(1, 99999);
+            $safe_file_name = preg_replace("/[^a-zA-Z0-9.]/", "_", $original_file_name);
+            $file_name = $RandomAccountNumber . "_" . $safe_file_name;
+            $destination_path = "item_image/" . $file_name;
+
+            // Delete old image if exists
+            $data = $db_handle->runQuery("SELECT * FROM `category` WHERE cat_id ='{$cat_id}'");
+            if (!empty($data[0]['item_image']) && file_exists($data[0]['item_image'])) {
+                unlink($data[0]['item_image']);
+            }
+
+            // Compress and move new image
+            compressImage($file_tmp, $destination_path, 85, $file_ext);
+            $image = $destination_path;
+            $query .= ", `item_image`='" . $image . "'";
+        } else {
+            $_SESSION['alert'] = 'danger';
+            echo "<script>alert('Invalid image file.'); window.location.href = 'Category';</script>";
+            exit();
+        }
+    }
+
+    $update_item = $db_handle->insertQuery("UPDATE `items` SET `item_name`='$item_name',`item_price`='$item_price',`short_desc`='$short_desc',`updated_at`='$updated_at',`cat_id` = '$cat_id' $query WHERE item_id = '$item_id'");
     if($update_item){
         $_SESSION['alert'] = 'success';
         echo "<script>window.location.href='Item';</script>";

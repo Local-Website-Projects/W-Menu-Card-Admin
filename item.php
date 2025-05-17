@@ -88,6 +88,9 @@ $today = date("Y-m-d");
                                 <p>Item Price</p>
                                 <input type="text" value="<?php echo $items[0]['item_price']; ?>" name="item_price" autocomplete="off"
                                        required>
+                                <p>Item Image (Recommended ratio 150*150)</p>
+                                <input type="file" name="item_image" accept="image/*">
+                                <img src="<?php echo $items[0]['item_image'];?>" height="100px" width="auto">
                                 <p>Select Category</p>
                                 <select name="cat_id" class="form-control" required>
                                     <option value="<?php echo $items[0]['cat_id'];?>" selected><?php echo $items[0]['category_name'];?></option>
@@ -100,6 +103,13 @@ $today = date("Y-m-d");
                                     }
                                     ?>
                                 </select>
+
+                                <p>Select As Popular</p>
+                                <select name="popular" class="form-control" required>
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+
                                 <p>Short Description</p>
                                 <input type="text" value="<?php echo $items[0]['short_desc']; ?>" name="short_desc" autocomplete="off"
                                        required>
@@ -135,12 +145,15 @@ $today = date("Y-m-d");
                                             </div>
                                             <div class="modal-body">
                                                 <div class="form-basic form-shadow">
-                                                    <form action="Insert" method="post">
+                                                    <form action="Insert" method="post" enctype="multipart/form-data">
                                                         <p>Item Name</p>
                                                         <input type="text" placeholder="Item Name" name="item_name" autocomplete="off"
                                                                required>
                                                         <p>Item Price</p>
                                                         <input type="text" placeholder="Item Price" name="item_price" autocomplete="off"
+                                                               required>
+                                                        <p>Item Image (Recommended ratio 150*150)</p>
+                                                        <input type="file" name="item_image" accept="image/*"
                                                                required>
                                                         <p>Select Category</p>
                                                             <select name="cat_id" class="form-control" required>
@@ -155,6 +168,11 @@ $today = date("Y-m-d");
                                                                 }
                                                                 ?>
                                                             </select>
+                                                        <p>Select As Popular</p>
+                                                        <select name="popular" class="form-control" required>
+                                                            <option value="0" selected>No</option>
+                                                            <option value="1">Yes</option>
+                                                        </select>
                                                         <p>Short Description</p>
                                                         <input type="text" placeholder="Short Description"
                                                                name="short_desc" autocomplete="off"
@@ -183,6 +201,7 @@ $today = date("Y-m-d");
                                 <th scope="col">Sl No</th>
                                 <th scope="col">Item Name</th>
                                 <th scope="col">Item Price</th>
+                                <th scope="col">Item Image</th>
                                 <th scope="col">Category Name</th>
                                 <th scope="col">Item Description</th>
                                 <th scope="col">Status</th>
@@ -191,14 +210,15 @@ $today = date("Y-m-d");
                             </thead>
                             <tbody>
                             <?php
-                            $fetch_item = $db_handle->runQuery("select items.item_id, items.item_name, items.item_price, items.short_desc,items.status,category.category_name from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
-                            $fetch_item_no = $db_handle->numRows("select items.item_id, items.item_name, items.item_price, items.short_desc,items.status,category.category_name from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
+                            $fetch_item = $db_handle->runQuery("select items.item_id, items.item_name, items.item_price,items.item_image, items.short_desc,items.status,category.category_name from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
+                            $fetch_item_no = $db_handle->numRows("select items.item_id, items.item_name, items.item_price, items.item_image, items.short_desc,items.status,category.category_name from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
                             for ($i = 0; $i < $fetch_item_no; $i++) {
                                 ?>
                                 <tr>
                                     <th><?php echo $i + 1; ?></th>
                                     <td><?php echo $fetch_item[$i]['item_name']; ?></td>
                                     <td><?php echo $fetch_item[$i]['item_price']; ?></td>
+                                    <td><img src="<?php echo $fetch_item[$i]['item_image'];?>" height="50px" width="auto"></td>
                                     <td><?php echo $fetch_item[$i]['category_name']; ?></td>
                                     <td><?php echo $fetch_item[$i]['short_desc']; ?></td>
                                     <td><?php

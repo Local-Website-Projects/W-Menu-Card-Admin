@@ -89,10 +89,15 @@ $today = date("Y-m-d");
                     <div class="col-12">
                         <h3>Edit Category</h3>
                         <div class="form-basic form-shadow">
-                            <form action="Update" method="post">
+                            <form action="Update" method="post" enctype="multipart/form-data">
                                 <p>Category Name</p>
                                 <input type="text" name="cat_name" value="<?php echo $cat[0]['category_name'];?>" autocomplete="off"
                                        required>
+
+                                <p>Category Image</p>
+                                <input type="file" name="cat_image" accept="image/*">
+
+                                <img src="<?php echo $cat[0]['cat_image'];?>" alt="category image" style="height: 100px; width: 100px;">
                                 <input type="hidden" value="<?php echo $_GET['edit']?>" name="cat_id">
                                 <input type="submit" name="category_edit" value="Update Category">
                             </form>
@@ -125,10 +130,14 @@ $today = date("Y-m-d");
                                             </div>
                                             <div class="modal-body">
                                                 <div class="form-basic form-shadow">
-                                                    <form action="Insert" method="post" id="password_update">
-                                                        <p>Category Name</p>
+                                                    <form action="Insert" method="post" id="password_update" enctype="multipart/form-data">
+                                                        <p>Category Name *</p>
                                                         <input type="text" placeholder="Category Name" name="cat_name" autocomplete="off"
                                                                required>
+
+                                                        <p>Category Image (Recommended aspect ratio 50*50)</p>
+                                                        <input type="file" name="cat_image" accept="image/*">
+
                                                         <input type="submit" name="add_category" value="Add Category">
                                                     </form>
                                                 </div>
@@ -151,6 +160,7 @@ $today = date("Y-m-d");
                             <tr>
                                 <th scope="col">Sl No</th>
                                 <th scope="col">Category Name</th>
+                                <th scope="col">Category Image</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -164,6 +174,7 @@ $today = date("Y-m-d");
                                 <tr>
                                     <th><?php echo $i+1;?></th>
                                     <td><?php echo $fetch_cat[$i]['category_name'];?></td>
+                                    <td><img src="<?php echo $fetch_cat[$i]['cat_image'];?>" height="50px" width="auto"></td>
                                     <td><?php
                                         if($fetch_cat[$i]['status'] == 1){
                                             ?>
