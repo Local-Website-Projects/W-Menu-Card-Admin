@@ -106,8 +106,8 @@ $today = date("Y-m-d");
 
                                 <p>Select As Popular</p>
                                 <select name="popular" class="form-control" required>
-                                    <option value="0" selected>No</option>
-                                    <option value="1">Yes</option>
+                                    <option value="0" <?php if($items[0]['popular'] == '0') echo 'selected';?>>No</option>
+                                    <option value="1" <?php if($items[0]['popular'] == '1') echo 'selected';?>>Yes</option>
                                 </select>
 
                                 <p>Short Description</p>
@@ -205,12 +205,13 @@ $today = date("Y-m-d");
                                 <th scope="col">Category Name</th>
                                 <th scope="col">Item Description</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Popular</th>
                                 <th scope="col">Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php
-                            $fetch_item = $db_handle->runQuery("select items.item_id, items.item_name, items.item_price,items.item_image, items.short_desc,items.status,category.category_name from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
+                            $fetch_item = $db_handle->runQuery("select items.item_id, items.item_name,items.popular, items.item_price,items.item_image, items.short_desc,items.status,category.category_name from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
                             $fetch_item_no = $db_handle->numRows("select items.item_id, items.item_name, items.item_price, items.item_image, items.short_desc,items.status,category.category_name from items,category where items.user_id = {$_SESSION['admin']} and items.cat_id = category.cat_id order by items.item_id desc");
                             for ($i = 0; $i < $fetch_item_no; $i++) {
                                 ?>
@@ -221,6 +222,7 @@ $today = date("Y-m-d");
                                     <td><img src="<?php echo $fetch_item[$i]['item_image'];?>" height="50px" width="auto"></td>
                                     <td><?php echo $fetch_item[$i]['category_name']; ?></td>
                                     <td><?php echo $fetch_item[$i]['short_desc']; ?></td>
+                                    <td><?php if($fetch_item[$i]['popular'] == 1) echo 'yes'; else echo 'No';?></td>
                                     <td><?php
                                         if ($fetch_item[$i]['status'] == 1) {
                                             ?>

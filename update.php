@@ -222,6 +222,7 @@ if(isset($_POST['update_item'])){
     $short_desc = $db_handle->checkValue($_POST['short_desc']);
     $item_id = $db_handle->checkValue($_POST['item_id']);
     $cat_id = $db_handle->checkValue($_POST['cat_id']);
+    $popular = $db_handle->checkValue($_POST['popular']);
     $image = '';
     $query = '';
     if (!empty($_FILES['item_image']['name'])) {
@@ -260,7 +261,7 @@ if(isset($_POST['update_item'])){
         }
     }
 
-    $update_item = $db_handle->insertQuery("UPDATE `items` SET `item_name`='$item_name',`item_price`='$item_price',`short_desc`='$short_desc',`updated_at`='$updated_at',`cat_id` = '$cat_id' $query WHERE item_id = '$item_id'");
+    $update_item = $db_handle->insertQuery("UPDATE `items` SET `item_name`='$item_name',`item_price`='$item_price',`short_desc`='$short_desc',`updated_at`='$updated_at',`cat_id` = '$cat_id',`popular` = '$popular' $query WHERE item_id = '$item_id'");
     if($update_item){
         $_SESSION['alert'] = 'success';
         echo "<script>window.location.href='Item';</script>";
